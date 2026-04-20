@@ -11,7 +11,8 @@
 推荐直接使用本地一键发布脚本：
 
 ```bash
-./scripts/publish.sh --version 0.1.2
+cd ..
+./scirpts/publish.sh --version 0.1.2
 ```
 
 或者：
@@ -23,7 +24,8 @@ pnpm release:all -- --version 0.1.2
 如果不手动指定版本，也可以按最新 tag 自动递增：
 
 ```bash
-./scripts/publish.sh --bump patch
+cd ..
+./scirpts/publish.sh --bump patch
 ```
 
 这个脚本会按固定顺序处理：
@@ -42,6 +44,8 @@ pnpm release:all -- --version 0.1.2
 
 ```text
 ptadmin_vue.pangtou.com/
+├─ scirpts/
+│  └─ publish.sh
 ├─ frontend-sdk/
 └─ frontend-templates/
    ├─ plugin-module/

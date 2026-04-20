@@ -9,7 +9,7 @@
         "release:version": "node ./scripts/release-packages.mjs version",
         "release:check": "node ./scripts/release-packages.mjs check",
         "release:publish": "node ./scripts/release-packages.mjs publish",
-        "release:all": "bash ./scripts/publish.sh"
+        "release:all": "bash ../scirpts/publish.sh"
     },
     "devDependencies": {
         "typescript": "^5.8.3"
