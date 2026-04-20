@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const repoRoot = path.resolve(__dirname, '..')
+const rootManifestPath = path.join(repoRoot, 'package.json')
 
 const releasePackages = [
     {
@@ -153,7 +154,12 @@ function syncDependencyVersions(manifest, targetVersion) {
 
 async function syncVersions(targetVersion) {
     assertVersion(targetVersion)
+    const rootManifest = await readJson(rootManifestPath)
     const manifests = await loadReleaseManifests()
+
+    rootManifest.version = targetVersion
+    await writeJson(rootManifestPath, rootManifest)
+    console.log(`[release-packages] synced workspace -> ${targetVersion}`)
 
     for (const item of manifests) {
         item.manifest.version = targetVersion

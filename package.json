@@ -8,7 +8,8 @@
         "check:types": "pnpm -r --if-present run check:types",
         "release:version": "node ./scripts/release-packages.mjs version",
         "release:check": "node ./scripts/release-packages.mjs check",
-        "release:publish": "node ./scripts/release-packages.mjs publish"
+        "release:publish": "node ./scripts/release-packages.mjs publish",
+        "release:all": "bash ./scripts/publish.sh"
     },
     "devDependencies": {
         "typescript": "^5.8.3"

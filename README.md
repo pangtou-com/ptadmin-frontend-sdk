@@ -8,66 +8,56 @@
 
 ## 发布流程
 
-同步版本：
+推荐直接使用本地一键发布脚本：
 
 ```bash
-pnpm release:version -- --version 0.1.0
+./scripts/publish.sh --version 0.1.2
 ```
 
-本地校验：
+或者：
 
 ```bash
+pnpm release:all -- --version 0.1.2
+```
+
+如果不手动指定版本，也可以按最新 tag 自动递增：
+
+```bash
+./scripts/publish.sh --bump patch
+```
+
+这个脚本会按固定顺序处理：
+
+- 同步 `frontend-sdk` 仓库根版本和 3 个 SDK 包版本
+- 同步 `plugin-module`、`plugin-micro-app` 两个模板仓库的版本号
+- 同步模板仓库中的 SDK 依赖版本
+- 执行 SDK 的 build 和 `check:types`
+- 执行两个模板仓库的 `check:types` 和 `manifest:check`
+- 提交三个仓库
+- 发布 `@pangtou/host-sdk`、`@pangtou/shared`、`@pangtou/module-runtime` 到 npm
+- 为三个仓库创建并推送同名 tag，例如 `v0.1.2`
+
+发布脚本要求目录结构保持如下：
+
+```text
+ptadmin_vue.pangtou.com/
+├─ frontend-sdk/
+└─ frontend-templates/
+   ├─ plugin-module/
+   └─ plugin-micro-app/
+```
+
+发布前要求：
+
+- 三个仓库都在 `main` 分支
+- 三个仓库工作区都必须是干净状态
+- 本地已经具备 Git 推送权限
+- 本地已经完成 npm 登录，并具备这 3 个包的发布权限
+
+如果只想做版本同步和校验，仍然可以分别使用：
+
+```bash
+pnpm release:version -- --version 0.1.2
 pnpm release:check
+pnpm release:publish -- --version 0.1.2
 ```
-
-发布到 npm：
-
-```bash
-pnpm release:publish -- --version 0.1.0
-```
-
-发布脚本会自动：
-
-- 同步三个包的版本号
-- 同步内部依赖版本
-- 依次执行 build 和 check:types
-- 按顺序发布到 npm registry
-
-## 模板仓库同步
-
-如果需要在 SDK 发布后自动给模板仓库提升级 PR，可以使用：
-
-```bash
-GitHub Actions -> Notify Template Repositories
-```
-
-如果希望发布完成后自动通知模板仓库，直接使用：
-
-```bash
-GitHub Actions -> Publish SDK
-```
-
-或者直接推送 tag：
-
-```bash
-git tag v0.1.1
-git push origin v0.1.1
-```
-
-这个工作流会自动：
-
-- 安装依赖
-- 执行发布脚本
-- 发布成功后调用模板通知工作流
-- 触发模板仓库自动创建版本同步 PR
-
-需要先在仓库配置：
-
-- Repository variable `FRONTEND_TEMPLATE_REPOSITORIES`
-  用换行分隔模板仓库，例如：
-  `owner/plugin-module`
-  `owner/plugin-micro-app`
-- Repository secret `FRONTEND_TEMPLATE_DISPATCH_TOKEN`
-  需要具备向模板仓库发送 `repository_dispatch` 的权限
-- Repository secret `NPM_TOKEN`
-  需要具备发布 `@pangtou/host-sdk`、`@pangtou/shared`、`@pangtou/module-runtime` 的 npm 权限
