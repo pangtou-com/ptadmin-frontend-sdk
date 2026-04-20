@@ -32,3 +32,42 @@ pnpm release:publish -- --version 0.1.0
 - 同步内部依赖版本
 - 依次执行 build 和 check:types
 - 按顺序发布到 npm registry
+
+## 模板仓库同步
+
+如果需要在 SDK 发布后自动给模板仓库提升级 PR，可以使用：
+
+```bash
+GitHub Actions -> Notify Template Repositories
+```
+
+如果希望发布完成后自动通知模板仓库，直接使用：
+
+```bash
+GitHub Actions -> Publish SDK
+```
+
+或者直接推送 tag：
+
+```bash
+git tag v0.1.1
+git push origin v0.1.1
+```
+
+这个工作流会自动：
+
+- 安装依赖
+- 执行发布脚本
+- 发布成功后调用模板通知工作流
+- 触发模板仓库自动创建版本同步 PR
+
+需要先在仓库配置：
+
+- Repository variable `FRONTEND_TEMPLATE_REPOSITORIES`
+  用换行分隔模板仓库，例如：
+  `owner/plugin-module`
+  `owner/plugin-micro-app`
+- Repository secret `FRONTEND_TEMPLATE_DISPATCH_TOKEN`
+  需要具备向模板仓库发送 `repository_dispatch` 的权限
+- Repository secret `NPM_TOKEN`
+  需要具备发布 `@pangtou/host-sdk`、`@pangtou/shared`、`@pangtou/module-runtime` 的 npm 权限
