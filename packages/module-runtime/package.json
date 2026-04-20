@@ -1,6 +1,6 @@
 {
     "name": "@pangtou/module-runtime",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Runtime primitives for loading, mounting, and registering Pangtou modules.",
     "type": "module",
     "main": "./dist/index.js",
@@ -22,8 +22,8 @@
         "check:types": "tsc --noEmit -p tsconfig.json"
     },
     "dependencies": {
-        "@pangtou/host-sdk": "0.1.1",
-        "@pangtou/shared": "0.1.1"
+        "@pangtou/host-sdk": "0.1.2",
+        "@pangtou/shared": "0.1.2"
     },
     "publishConfig": {
         "access": "public"
