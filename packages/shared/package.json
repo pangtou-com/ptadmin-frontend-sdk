@@ -1,0 +1,27 @@
+{
+    "name": "@pangtou/shared",
+    "version": "0.1.0",
+    "description": "Shared protocol types, manifest parsers, and request utilities for Pangtou plugins.",
+    "type": "module",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js"
+        },
+        "./package.json": "./package.json"
+    },
+    "files": [
+        "dist",
+        "README.md"
+    ],
+    "sideEffects": false,
+    "scripts": {
+        "build": "tsc -p tsconfig.build.json",
+        "check:types": "tsc --noEmit -p tsconfig.json"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
+}

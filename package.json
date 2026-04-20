@@ -1,0 +1,16 @@
+{
+    "name": "@pangtou/frontend-sdk-workspace",
+    "private": true,
+    "version": "0.1.0",
+    "packageManager": "pnpm@10.12.1",
+    "scripts": {
+        "build": "pnpm -r --if-present run build",
+        "check:types": "pnpm -r --if-present run check:types",
+        "release:version": "node ./scripts/release-packages.mjs version",
+        "release:check": "node ./scripts/release-packages.mjs check",
+        "release:publish": "node ./scripts/release-packages.mjs publish"
+    },
+    "devDependencies": {
+        "typescript": "^5.8.3"
+    }
+}
