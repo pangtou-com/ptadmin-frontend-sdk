@@ -145,11 +145,15 @@ create_tag() {
     git -C "$repo_dir" tag "v$version"
 }
 
-push_repo() {
+push_branch() {
+    local repo_dir="$1"
+    git -C "$repo_dir" push origin "$DEFAULT_BRANCH"
+}
+
+push_tag() {
     local repo_dir="$1"
     local version="$2"
 
-    git -C "$repo_dir" push origin "$DEFAULT_BRANCH"
     git -C "$repo_dir" push origin "v$version"
 }
 
@@ -249,6 +253,13 @@ commit_repo "$SDK_ROOT" "frontend-sdk" "$VERSION"
 commit_repo "$MODULE_TEMPLATE_ROOT" "plugin-module" "$VERSION"
 commit_repo "$MICRO_APP_TEMPLATE_ROOT" "plugin-micro-app" "$VERSION"
 
+if [ "$PUSH_CHANGES" -eq 1 ]; then
+    info "推送 main 分支到 GitHub"
+    push_branch "$SDK_ROOT"
+    push_branch "$MODULE_TEMPLATE_ROOT"
+    push_branch "$MICRO_APP_TEMPLATE_ROOT"
+fi
+
 info "发布到 npm"
 node "$SDK_ROOT/scripts/release-packages.mjs" publish --version "$VERSION" --tag "$NPM_TAG" --skip-build --skip-check
 
@@ -258,10 +269,10 @@ create_tag "$MODULE_TEMPLATE_ROOT" "$VERSION"
 create_tag "$MICRO_APP_TEMPLATE_ROOT" "$VERSION"
 
 if [ "$PUSH_CHANGES" -eq 1 ]; then
-    info "推送到 GitHub"
-    push_repo "$SDK_ROOT" "$VERSION"
-    push_repo "$MODULE_TEMPLATE_ROOT" "$VERSION"
-    push_repo "$MICRO_APP_TEMPLATE_ROOT" "$VERSION"
+    info "推送 tag 到 GitHub"
+    push_tag "$SDK_ROOT" "$VERSION"
+    push_tag "$MODULE_TEMPLATE_ROOT" "$VERSION"
+    push_tag "$MICRO_APP_TEMPLATE_ROOT" "$VERSION"
 fi
 
 success "发布完成: v$VERSION"

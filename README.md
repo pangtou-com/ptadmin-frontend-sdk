@@ -34,6 +34,7 @@ pnpm release:all -- --version 0.1.2
 - 执行 SDK 的 build 和 `check:types`
 - 执行两个模板仓库的 `check:types` 和 `manifest:check`
 - 提交三个仓库
+- 先推送三个仓库的 `main` 分支
 - 发布 `@pangtou/host-sdk`、`@pangtou/shared`、`@pangtou/module-runtime` 到 npm
 - 为三个仓库创建并推送同名 tag，例如 `v0.1.2`
 
