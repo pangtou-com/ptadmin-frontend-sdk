@@ -1,20 +1,18 @@
 import type { HostSdk } from '@pangtou/host-sdk'
-import type { ModulePageEntry, ModuleRouteEntry, ModuleWidgetEntry } from '@pangtou/shared'
+import type { ModulePageEntry, ModuleWidgetEntry } from '@pangtou/shared'
 
 /**
  * 模块的标准导出结构。
  *
- * 宿主会从这里收集路由、页面、widget 和安装钩子。
+ * 宿主会从这里收集页面、widget 和安装钩子。
  */
 export interface Module {
     name: string
     version: string
     title: string
     description?: string
-    routes?: ModuleRouteEntry[]
     pages?: ModulePageEntry[]
     widgets?: ModuleWidgetEntry[]
-    permissions?: string[]
     install?: (sdk: HostSdk) => void | Promise<void>
 }
 
@@ -69,11 +67,6 @@ export function registerModule(module: Module) {
 /** 获取当前已注册的全部模块。 */
 export function getRegisteredModules() {
     return Array.from(moduleRegistry.values())
-}
-
-/** 汇总当前所有模块声明的路由。 */
-export function getRegisteredRoutes() {
-    return getRegisteredModules().flatMap((module) => module.routes ?? [])
 }
 
 /** 汇总当前所有模块声明的 widget。 */

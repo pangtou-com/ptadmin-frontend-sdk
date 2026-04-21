@@ -1,6 +1,6 @@
 {
     "name": "@pangtou/shared",
-    "version": "0.1.2",
+    "version": "0.1.4",
     "description": "Shared protocol types, manifest parsers, and request utilities for Pangtou plugins.",
     "type": "module",
     "main": "./dist/index.js",

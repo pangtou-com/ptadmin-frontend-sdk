@@ -5,32 +5,23 @@ export interface FrontendCatalogPayload {
     items: FrontendManifest[]
 }
 
-/** 接收原始 manifest 输入时的 catalog 结构。 */
-export interface FrontendCatalogInput {
-    items: FrontendManifestInput[]
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-    return Boolean(value) && typeof value === 'object' && !Array.isArray(value)
-}
+/** 当前后端主格式：直接返回 manifest 数组。 */
+export type FrontendCatalogArrayInput = FrontendManifestInput[]
 
 /**
  * 解析后端返回的 frontend catalog 数据。
  * 这一层只关心清单本身，不处理通用业务响应包裹结构。
+ *
+ * 当前主协议为直接返回数组：
+ * `[{ ...manifest }]`
  */
-export function parseFrontendCatalog(input: FrontendCatalogInput | Record<string, unknown>) {
-    if (!isRecord(input)) {
-        throw new Error('Invalid frontend catalog: root value must be an object.')
-    }
-
-    const { items } = input
-
-    if (!Array.isArray(items)) {
-        throw new Error('Invalid frontend catalog: field "items" must be an array.')
+export function parseFrontendCatalog(input: FrontendCatalogArrayInput) {
+    if (!Array.isArray(input)) {
+        throw new Error('Invalid frontend catalog: root value must be an array.')
     }
 
     return {
-        items: items.map((item) => parseFrontendManifest(item)),
+        items: input.map((item) => parseFrontendManifest(item)),
     } satisfies FrontendCatalogPayload
 }
 

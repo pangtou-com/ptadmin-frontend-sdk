@@ -28,12 +28,12 @@ pnpm --filter @pangtou/module-runtime check:types
 ## 核心导出
 
 - `Module`
-  标准模块结构，承载 `routes`、`pages`、`widgets`、`install`
+  标准模块结构，承载 `pages`、`widgets`、`install`
 - `ModuleApplication`
   需要显式 `mount/unmount` 的应用级导出
 - `registerModule` / `getRegisteredModules`
   模块注册和读取
-- `getRegisteredRoutes` / `getRegisteredPages` / `getRegisteredWidgets`
+- `getRegisteredPages` / `getRegisteredWidgets`
   从注册表中汇总模块能力
 - `resolveModuleExport`
   兼容 `default`、`module`、`createModule` 等导出形式
@@ -53,13 +53,6 @@ export const demoModule: Module = {
   name: 'demo',
   version: '1.0.0',
   title: '示例模块',
-  routes: [
-    {
-      name: 'demo-home',
-      path: '/demo',
-      title: '示例首页',
-    },
-  ],
   pages: [],
 }
 ```
@@ -67,13 +60,13 @@ export const demoModule: Module = {
 ```ts
 import {
   registerModule,
-  getRegisteredRoutes,
+  getRegisteredPages,
   resolveModuleExport,
 } from '@pangtou/module-runtime'
 
 registerModule(resolveModuleExport({ module: demoModule }))
 
-const routes = getRegisteredRoutes()
+const pages = getRegisteredPages()
 ```
 
 ## 和 `frontend manifest` 的关系

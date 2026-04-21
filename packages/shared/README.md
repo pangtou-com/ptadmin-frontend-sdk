@@ -72,6 +72,14 @@ pnpm --filter @pangtou/shared check:types
 其中 `ModulePageEntry` 的 `schemaKey` 可用于标记 schema 页面。
 当前协议层只保留标识字段，后续由宿主根据 `schemaKey` 切换到专用的 schema 页面容器并按需拉取配置。
 
+`ModuleWidgetEntry` 当前也遵循同样的最小协议思路：
+
+- 只声明 widget 的基础元数据
+- 不直接约定 widget 的渲染组件实现
+- 宿主可把它理解为“可用 widget 类型清单”
+
+如果后续需要支持插件真正提供自定义 widget，再扩展 `component`、异步 loader、`schemaKey`、`defaultConfig` 等字段即可。
+
 ### `http`
 
 定义公共请求工具：
@@ -103,39 +111,37 @@ import {
   unwrapBusinessEnvelope,
 } from '@pangtou/shared'
 
-const catalog = parseFrontendCatalog({
-  items: [
-    {
-      id: 'cms',
-      code: 'cms',
-      name: '内容管理',
-      version: '1.0.0',
-      enabled: true,
-      kind: 'module',
-      runtime: 'federation',
-      routeBase: '/cms',
-      entry: {
-        federation: {
-          remote: 'cms_remote',
-          entry: 'https://static.example.com/cms/assets/remoteEntry.js',
-          expose: './module',
-        },
+const catalog = parseFrontendCatalog([
+  {
+    id: 'cms',
+    code: 'cms',
+    name: '内容管理',
+    version: '1.0.0',
+    enabled: true,
+    kind: 'module',
+    runtime: 'federation',
+    routeBase: '/cms',
+    entry: {
+      federation: {
+        remote: 'cms_remote',
+        entry: 'https://static.example.com/cms/assets/remoteEntry.js',
+        expose: './module',
       },
-      capabilities: {
-        routes: true,
-        pages: true,
-        widgets: false,
-        settings: false,
-      },
-      compatibility: {
-        console: '>=0.1.0',
-      },
-      meta: {},
     },
-  ],
-})
+    capabilities: {
+      routes: true,
+      pages: true,
+      widgets: false,
+      settings: false,
+    },
+    compatibility: {
+      console: '>=0.1.0',
+    },
+    meta: {},
+  },
+])
 
-const response = await requestJson<{ code: number; data: { items: unknown[] } }>({
+const response = await requestJson<{ code: number; data: unknown[] }>({
   baseURL: 'https://api.example.com',
   url: '/auth/frontends',
   method: 'GET',

@@ -17,10 +17,10 @@ importers:
   packages/module-runtime:
     dependencies:
       '@pangtou/host-sdk':
-        specifier: 0.1.2
+        specifier: 0.1.4
         version: link:../host-sdk
       '@pangtou/shared':
-        specifier: 0.1.2
+        specifier: 0.1.4
         version: link:../shared
 
   packages/shared: {}
