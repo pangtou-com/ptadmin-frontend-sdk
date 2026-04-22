@@ -1,27 +1,36 @@
 import { parseFrontendManifest, type FrontendManifest, type FrontendManifestInput } from './frontend-manifest'
 
-/** 标准 frontend catalog 载荷。 */
+/** 后端返回的 frontend catalog 原始载荷。 */
+export interface FrontendCatalogInput {
+    items: FrontendManifestInput[]
+}
+
+/** 标准 frontend catalog 解析结果。 */
 export interface FrontendCatalogPayload {
     items: FrontendManifest[]
 }
 
-/** 当前后端主格式：直接返回 manifest 数组。 */
-export type FrontendCatalogArrayInput = FrontendManifestInput[]
+/** 当前后端主格式：返回 `{ items: [...] }` 结构。 */
+export type FrontendCatalogArrayInput = FrontendCatalogInput
 
 /**
  * 解析后端返回的 frontend catalog 数据。
  * 这一层只关心清单本身，不处理通用业务响应包裹结构。
  *
- * 当前主协议为直接返回数组：
- * `[{ ...manifest }]`
+ * 当前主协议为：
+ * `{ items: [{ ...manifest }] }`
  */
 export function parseFrontendCatalog(input: FrontendCatalogArrayInput) {
-    if (!Array.isArray(input)) {
-        throw new Error('Invalid frontend catalog: root value must be an array.')
+    if (!input || typeof input !== 'object' || Array.isArray(input)) {
+        throw new Error('Invalid frontend catalog: root value must be an object.')
+    }
+
+    if (!Array.isArray(input.items)) {
+        throw new Error('Invalid frontend catalog: field "items" must be an array.')
     }
 
     return {
-        items: input.map((item) => parseFrontendManifest(item)),
+        items: input.items.map((item) => parseFrontendManifest(item)),
     } satisfies FrontendCatalogPayload
 }
 

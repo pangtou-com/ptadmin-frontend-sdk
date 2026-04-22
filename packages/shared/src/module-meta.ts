@@ -31,9 +31,7 @@ export interface ModuleWidgetEntry {
 /** 模块页面声明，用于和后端资源树按 `module + page_key` 做绑定。 */
 export interface ModulePageEntry {
     key: string
-    title: string
     module: string
-    path: string
     component: unknown
     /**
      * 页面对应的 schema 标识。
