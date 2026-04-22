@@ -1,6 +1,6 @@
 {
     "name": "@pangtou/host-sdk",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "description": "Host SDK contract for Pangtou plugins and console runtimes.",
     "type": "module",
     "main": "./dist/index.js",
